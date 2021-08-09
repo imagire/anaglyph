@@ -12,6 +12,7 @@ Unityのエディタ上での動作を想定しています。
 
 「save」ボタンを押せば、result.pngという名前で保存されます。
 
+# 作例
 ![作例1](result_mtfuji.png)
 ![作例2](result_dino.png)
 ![作例3](result_tri.png)
