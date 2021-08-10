@@ -71,17 +71,17 @@ public class EyeCameraController : MonoBehaviour
         Mp.m33 = 0.0f;
 
         // バイアス
-        float bias_x = Vector3.Dot(oc, T) / T2;
-        float bias_y = Vector3.Dot(oc, B) / B2;
+        float bias_x = -Vector3.Dot(oc, T) / T2;
+        float bias_y = -Vector3.Dot(oc, B) / B2;
 
         // 瞳孔間距離補正
         Vector3 Vpd = gameObject.transform.localPosition.normalized *
-            (-Director_.getPupillaryDistance() / Director_.getA4Width());
-        bias_x += Vpd.x;
+            (-Director_.getPupillaryDistance() * 10.0f / Director_.getA4Width());// 10.0はmmとcmの変換
+        bias_x -= Vpd.x;
 
         Matrix4x4 Mbias = Matrix4x4.identity;
-        Mbias.m02 = bias_x / Mp.m00;// 本来は射影行列の後の平行移動であるが、射影行列の前に書けるようにしたため、変わった場所と係数の補正が入る
-        Mbias.m12 = bias_y / Mp.m11;
+        Mbias.m02 = -bias_x / Mp.m00;// 本来は射影行列の後の平行移動であるが、射影行列の前に書けるようにしたため、変わった場所と係数の補正が入る
+        Mbias.m12 = -bias_y / Mp.m11;
 
         Matrix4x4 Mview = Mbias * Mtbn * Mcam;
         cam_.worldToCameraMatrix = Mview;
